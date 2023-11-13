@@ -11,8 +11,8 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div v-if="catImageUrl" class="text-center">
-            <img :src="catImageUrl" alt="Random Cat" class="img-fluid rounded">
+          <div class="text-center">
+            <img :src="catData.image_url" alt="Random Cat" class="img-fluid rounded">
           </div>
           <form @submit.prevent="updateCat" class="my-4">
             <div class="form-group">
@@ -63,14 +63,6 @@ export default {
       required: false,
     },
   },
-  data() {
-    return {
-      catImageUrl: '', 
-    }
-  },
-  created() {
-    this.fetchCatImage();
-  },
   methods: {
     updateCat() {
       fetch(`http://localhost:8000/api/update_cat/${this.catData.id}/`, {
@@ -86,18 +78,6 @@ export default {
         })
         .catch(error => {
           console.error("Error:", error);
-        });
-    },
-    fetchCatImage() {
-      fetch('https://api.thecatapi.com/v1/images/search')
-        .then(response => response.json())
-        .then(data => {
-          if (data.length > 0) {
-            this.catImageUrl = data[0].url; // Store the image URL
-          }
-        })
-        .catch(error => {
-          console.error("Error fetching cat image:", error);
         });
     }
   }

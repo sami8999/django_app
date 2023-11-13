@@ -3,8 +3,9 @@
       <h2 class="mb-3">List of Cats</h2>
       <ul class="list-group">
         <li v-for="cat in cats" :key="cat.id" class="list-group-item">
-          <div class="d-flex justify-content-between align-items-center">
+          <div class="card-body d-flex justify-content-between align-items-center">
             <div>
+              <img :src="cat.image_url" alt="Cat" class="cat-image">
               ID: <strong>{{ cat.id }}</strong>
               Name: <strong>{{ cat.name }}</strong>
               Age: <strong>{{ cat.age }}</strong>
@@ -62,3 +63,12 @@ export default {
   }
 };
 </script>
+
+<style>
+.cat-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+</style>

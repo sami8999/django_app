@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from .models import Cat 
 import json
 from django.views.decorators.csrf import csrf_exempt
+import requests 
 
 def test_api_view(request):
     return JsonResponse({
@@ -41,6 +42,7 @@ def cats(request):
                 "age": cat.age,
                 "breed": cat.breed,
                 "is_adopted": cat.is_adopted,
+                "image_url": cat.image_url
             }
             for cat in cats
         ]
@@ -52,6 +54,7 @@ def cats(request):
         age = data.get("age")
         breed = data.get("breed")
         is_adopted = True if data.get("is_adopted")=="true" else False
+        image_url = fetch_cat_image()
 
         if name and age is not None and breed:
             cat = Cat.objects.create(
@@ -59,6 +62,7 @@ def cats(request):
                 age=age,
                 breed=breed,
                 is_adopted=is_adopted,
+                image_url = image_url
             )
             return JsonResponse({"message": "Cat added successfully."})
         else:
@@ -119,3 +123,16 @@ def update_cat(request, pk):
     elif request.method == "DELETE":
         cat.delete()
         return JsonResponse({"message": "Cat deleted successfully."})
+    
+def fetch_cat_image():
+    try:
+        response = requests.get('https://api.thecatapi.com/v1/images/search')
+        response.raise_for_status() 
+
+        data = response.json()
+        if len(data) > 0:
+            return data[0]['url']
+        else:
+            return "No image found"
+    except requests.RequestException as e:
+        return f"Error fetching cat image: {e}"

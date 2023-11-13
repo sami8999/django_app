@@ -11,5 +11,7 @@ class Cat(models.Model):
 
     is_adopted = models.BooleanField(default=False)
 
+    image_url = models.CharField(max_length=400, default = "https://cdn2.thecatapi.com/images/FTd8l4EXq.jpg")
+
     def __str__(self):
         return self.name
